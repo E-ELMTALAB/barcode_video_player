@@ -15,8 +15,6 @@ if __name__ == '__main__':
     video_1 = cv2.VideoCapture(r"F:\movie\Ted.2.2015.1080p.Farsi.Dubbed.mkv")
     video_2 = cv2.VideoCapture(r"F:\movie\No Time To Die (2021)\No  Time To Die (2021).mkv")
     
-
-
     while cv2.waitKey(1) != ord('q'):
         
     #### first operations on the image 
@@ -29,11 +27,10 @@ if __name__ == '__main__':
         image_dilate = cv2.dilate(image_canny , (5 , 5) , iterations=4)
         height, width, channels = image.shape
 
-        # square_found , four_points , image = box_finder.find_four_points(image , image_dilate , True , True)
-
+        #reading the barcode to play video on 
         four_points , found , bar_name , image = bar_reader.read_barcode(image)
 
-        # intializing the pionts 
+        # if barcode was found 
         if found:
             _ , ted_frame = video_1.read()
             _ , bond_frame = video_2.read()
@@ -44,6 +41,7 @@ if __name__ == '__main__':
                 case "bond":
                     frame = bond_frame
                     
+            #initializing the points
             overlay_h, overlay_w = frame.shape[:2]
             points1 = np.float32([[0, 0], [overlay_w, 0], [overlay_w, overlay_h],[0, overlay_h]])
             points2 = np.float32(four_points)
@@ -67,37 +65,6 @@ if __name__ == '__main__':
 
             # cv2.imshow("final" , final_masked_base)
             image = final_masked_base
-
-
-
-            
-
-
-        
-        # if square_found:
-        #     warped , points1 , points2 = box_finder.warp(image , four_points)
-        #     boxes = box_finder.slice(warped)
-        #     boxes = np.array(boxes)
-        #     sod_solver.solve(board)
-        #     # sod_solver.print_board(board , warped)
-        #     predicted_number = (detector.classify_digit(boxes[0][5]))
-        #     print("predicted : " + str(predicted_number))
-        #     written_box = box_finder.write_on_box(warped , 0 , 6 , predicted_number )
-
-            
-        #     # boxes2 = np.reshape(boxes , (9 , 9))
-        #     # written_box = box_finder.write_on_box(warped , 4 , 8 , 6)
-        #     # written_box = box_finder.write_on_box(warped , 8 , 0 , 3)
-        #     # written_box = box_finder.write_on_box(warped , 0 , 8 , 7)
-        #     # written_box = box_finder.write_on_box(warped , 8 , 8 , 2)
-
-        #     rewarped = box_finder.rewarp(image , points1 , points2 , warped)
-        #     cv2.imshow("warped" , warped)
-        #     cv2.imshow("slice[0]" , boxes[0][5])
-        #     # cv2.imshow("written_box" , written_box)
-        #     cv2.imshow("rewarped" , rewarped)
-        #     # print(boxes)
-
 
     #### showing the processed image 
         
